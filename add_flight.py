@@ -48,3 +48,44 @@ class AddFlightPage:
 
         # Add flight form
         self.create_add_flight_form()
+
+        def load_image(self):
+        # Load an image
+        self.image = Image.open('Airlines-min.png')
+        self.image = self.image.resize((600, 400), Image.LANCZOS)  # Resize the image
+        self.photo = ImageTk.PhotoImage(self.image)
+
+        # Create a label in the image frame
+        self.image_label = tk.Label(self.image_frame, image=self.photo)
+        self.image_label.pack(pady=20)
+
+    def create_add_flight_form(self):
+        tk.Label(self.content_frame, text='Add Flight', font=('Arial', 20)).pack(pady=(50, 20))  # Add more vertical space at the top
+
+        # Create labels and entry fields with vertical padding
+        tk.Label(self.content_frame, text='Flight Number').pack(pady=(10, 5))
+        self.flight_number_entry = tk.Entry(self.content_frame)
+        self.flight_number_entry.pack(pady=(5, 15))
+
+        tk.Label(self.content_frame, text='Origin').pack(pady=(10, 5))
+        self.origin_entry = tk.Entry(self.content_frame)
+        self.origin_entry.pack(pady=(5, 15))
+
+        tk.Label(self.content_frame, text='Destination').pack(pady=(10, 5))
+        self.destination_entry = tk.Entry(self.content_frame)
+        self.destination_entry.pack(pady=(5, 15))
+
+        tk.Label(self.content_frame, text='Departure Date (YYYY-MM-DD)').pack(pady=(10, 5))
+        self.departure_date_entry = tk.Entry(self.content_frame)
+        self.departure_date_entry.pack(pady=(5, 15))
+
+        tk.Label(self.content_frame, text='Return Date (YYYY-MM-DD)').pack(pady=(10, 5))
+        self.return_date_entry = tk.Entry(self.content_frame)
+        self.return_date_entry.pack(pady=(5, 15))
+
+        tk.Label(self.content_frame, text='Price').pack(pady=(10, 5))
+        self.price_entry = tk.Entry(self.content_frame)
+        self.price_entry.pack(pady=(5, 20))
+
+        self.save_button = tk.Button(self.content_frame, text='Save Flight', command=self.save_flight)
+        self.save_button.pack(pady=30)  # Add more padding at the bottom
