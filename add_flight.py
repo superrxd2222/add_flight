@@ -89,3 +89,63 @@ class AddFlightPage:
 
         self.save_button = tk.Button(self.content_frame, text='Save Flight', command=self.save_flight)
         self.save_button.pack(pady=30)  # Add more padding at the bottom
+
+        def save_flight(self):
+        flight_number = self.flight_number_entry.get()
+        origin = self.origin_entry.get()
+        destination = self.destination_entry.get()
+        departure_date = self.departure_date_entry.get()
+        return_date = self.return_date_entry.get()
+        try:
+            price = float(self.price_entry.get())
+        except ValueError:
+            messagebox.showerror('Error', 'Price must be a number')
+            return
+
+        # Handle empty fields
+        if not flight_number or not origin or not destination or not departure_date or not return_date:
+            messagebox.showerror("Error", "Please fill all fields")
+            return
+
+        # Validate date format
+        try:
+            datetime.datetime.strptime(departure_date, '%Y-%m-%d')
+            datetime.datetime.strptime(return_date, '%Y-%m-%d')
+        except ValueError:
+            messagebox.showerror("Error", "Invalid date format. Please use YYYY-MM-DD")
+            return
+
+        # Insert the data into the database
+        self.c.execute('''
+            INSERT INTO flights (flight_number, origin, destination, departure_date, return_date, price)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (flight_number, origin, destination, departure_date, return_date, price))
+        self.conn.commit()
+
+        # Clear the input fields
+        self.flight_number_entry.delete(0, tk.END)
+        self.origin_entry.delete(0, tk.END)
+        self.destination_entry.delete(0, tk.END)
+        self.departure_date_entry.delete(0, tk.END)
+        self.return_date_entry.delete(0, tk.END)
+        self.price_entry.delete(0, tk.END)
+        
+        # Show a confirmation message
+        messagebox.showinfo("Success", "Flight information saved successfully")
+
+    def open_dashboard_page(self):
+        self.root.destroy()
+        import dashboard
+
+    def login_page(self):
+        self.root.destroy()
+        import login
+
+    def __del__(self):
+        if hasattr(self, 'conn'):
+            self.conn.close()
+
+# Create the main window
+root = tk.Tk()
+app = AddFlightPage(root)
+root.mainloop()
